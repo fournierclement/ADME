@@ -7,8 +7,12 @@ import org.apache.spark.sql.types._
 
 
 case class Cleanser(dataFrame: DataFrame) {
+
   def mapColumn(from: String, toColumn: String, foo: UserDefinedFunction): Cleanser = {
-    Cleanser(dataFrame)
+    Cleanser( dataFrame.withColumn(
+        toColumn,
+        foo(dataFrame(from))
+    ))
   }
 
   /**
@@ -26,5 +30,3 @@ case class Cleanser(dataFrame: DataFrame) {
     }
   }
 }
-
-
