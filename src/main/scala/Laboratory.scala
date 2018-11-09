@@ -1,19 +1,9 @@
-
+import lib.{Session}
 import org.apache.spark.sql.{SparkSession}
 
-object Laboratory extends App {
-
-  def run() {
-    val spark = SparkSession.builder
-      .master("local")
-      .appName("Data Students")
-      .config("spark.some.config.option", "some-value")
-      .getOrCreate()
+object Laboratory extends App with Session {
+  override def runner(spark: SparkSession) {
     val dataframe = spark.read.json("./resources/data-students.json");
     dataframe.show()
-    spark.stop;
   }
-
-
-  run()
 }
