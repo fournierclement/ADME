@@ -1,6 +1,7 @@
 package model
 import lib.{Session}
 import org.apache.spark.sql.{SparkSession}
+import lib.Cleanser
 
 class ModelSession(filepath: String) extends Session {
   // Model creation
@@ -8,7 +9,7 @@ class ModelSession(filepath: String) extends Session {
   
   def runner(spark: SparkSession){
   // Read Json -> dataframe
-  val dataFrame = Cleanner(spark.read.json( filepath ))
+  val dataFrame = Cleanser(spark.read.json( filepath ))
     .mapColumn("os", "ios")
   // Create trainning DataFrame
   val trainingDF = dataFrame;
