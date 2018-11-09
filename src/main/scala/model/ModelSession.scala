@@ -10,8 +10,13 @@ class ModelSession(filepath: String) extends Session {
   def runner(spark: SparkSession){
   // Read Json -> dataframe
   val dataFrame = Cleanser(spark.read.json( filepath ))
-    .mapColumn("os", "ios")
-  // Create trainning DataFrame
+    .mapColumn("os", "ios", null)
+    //.DataFrameFlattener(dataFrame).flattenSchema
+
+
+
+
+  // Create training DataFrame
   val trainingDF = dataFrame;
   // Create validation DataFrame
   val validationDF = dataFrame;

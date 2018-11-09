@@ -5,7 +5,7 @@ step to follow to create a model
 - Open Spark Session
 - Read Json
 ## Clean DataFrame
-## Create trainning DataFrame
+## Create training DataFrame
 ## Create validation DataFrame
 ## Create Model
 ## Test Model
