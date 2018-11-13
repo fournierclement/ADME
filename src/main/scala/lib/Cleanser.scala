@@ -17,8 +17,25 @@ case class Cleanser(dataFrame: DataFrame) {
   }
 
 
+  def handleLabel(): DataFrame ={
+    val sparkSession = SparkSession.builder().getOrCreate()
+    import sparkSession.implicits._
+    this.dataFrame.withColumn("label", when($"label".endsWith("true"), 1).otherwise(0))
+
+  }
+
+  def handleAppOrSite(): DataFrame ={
+    val sparkSession = SparkSession.builder().getOrCreate()
+    import sparkSession.implicits._
+    this.dataFrame.withColumn("app", when($"appOrSite".endsWith("app"), 1).otherwise(0)).drop("appOrSite")
+
+  }
+
+
+
+
   /**
-    * Returns the cleanser dataframe with the interests column exploded
+    * Returns the cleanser's dataframe with the interests column exploded
     * @return the dataframe modified.
     */
   def handleInterests(): DataFrame = {
@@ -48,7 +65,7 @@ case class Cleanser(dataFrame: DataFrame) {
     df.withColumn(interestToHandle, when(
       $"interests".contains(interestToHandle+",")
       || $"interests".contains(interestToHandle + "-")
-      || $"interests".equals(interestToHandle),
+      || $"interests".endsWith(interestToHandle),
       1).otherwise(0))
   }
 

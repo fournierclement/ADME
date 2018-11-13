@@ -12,10 +12,20 @@ object Laboratory extends App with Session {
     val dataframe = spark.read.json("./resources/data-students.json")
 
 
+    val dataframetest = dataframe
+      .drop("type")
+      .drop("network")
+      .drop("media")
+      .drop("impid")
+      .drop("exchange")
+
+
+
     //Cleansing tests
-    val cleanser = Cleanser(dataframe)
-    val dataframe2 = cleanser.handleInterests().drop("interests")
-    dataframe2.show()
+    val dataFrame2 = Cleanser(dataframetest).handleAppOrSite()
+    val dataFrame3 = Cleanser(dataFrame2).handleLabel()
+    val dataFrame4 = Cleanser(dataFrame3).handleInterests()
+    dataFrame4.show()
   }
 
 }
