@@ -3,7 +3,8 @@ import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.expressions.UserDefinedFunction
 import org.apache.spark.sql._
 import org.apache.spark.sql.functions._
-import org.apache.spark.sql.types._
+
+import scala.annotation.tailrec
 
 
 case class Cleanser(dataFrame: DataFrame) {
@@ -15,18 +16,40 @@ case class Cleanser(dataFrame: DataFrame) {
     ))
   }
 
+
   /**
-    * Implicit function to flatten a given dataframe.
-    * @param df
+    * Returns the cleanser dataframe with the interests column exploded
+    * @return the dataframe modified.
     */
-  implicit class DataFrameFlattener(df: DataFrame) {
-    def flattenSchema: DataFrame = {
-      df.select(flatten(Nil, df.schema): _*)
+  def handleInterests(): DataFrame = {
+    val interests = Array("IAB1", "IAB2", "IAB3", "IAB4", "IAB5", "IAB6", "IAB7",
+      "IAB8", "IAB9", "IAB10", "IAB11", "IAB12", "IAB13", "IAB14", "IAB15",
+      "IAB16", "IAB17", "IAB18", "IAB19", "IAB20", "ÏAB21", "IAB22", "IAB23", "IAB24", "IAB25", "IAB26")
+    handleInterestTailrec(this.dataFrame, interests).drop("interests")
+  }
+
+
+  @tailrec
+  private def handleInterestTailrec(df : DataFrame, interests : Array[String]): DataFrame ={
+    if (interests.isEmpty){
+      df
+    }
+    else{
+      val newDF = handleOneInterest(df, interests(0))
+      handleInterestTailrec(newDF, interests.tail)
     }
 
-    protected def flatten(path: Seq[String], schema: DataType): Seq[Column] = schema match {
-      case s: StructType => s.fields.flatMap(f => flatten(path :+ f.name, f.dataType))
-      case other => col(path.map(n => s"`$n`").mkString(".")).as(path.mkString(".")) :: Nil
-    }
   }
+
+  //noinspection ComparingUnrelatedTypes
+  def handleOneInterest(df : DataFrame, interestToHandle : String): DataFrame ={
+    val sparkSession = SparkSession.builder().getOrCreate()
+    import sparkSession.implicits._
+    df.withColumn(interestToHandle, when(
+      $"interests".contains(interestToHandle+",")
+      || $"interests".contains(interestToHandle + "-")
+      || $"interests".equals(interestToHandle),
+      1).otherwise(0))
+  }
+
 }
