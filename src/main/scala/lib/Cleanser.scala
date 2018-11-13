@@ -28,10 +28,15 @@ case class Cleanser(dataFrame: DataFrame) {
     val sparkSession = SparkSession.builder().getOrCreate()
     import sparkSession.implicits._
     this.dataFrame.withColumn("app", when($"appOrSite".endsWith("app"), 1).otherwise(0)).drop("appOrSite")
-
   }
 
+  def handleOS(): DataFrame = {
+    val sparkSession = SparkSession.builder().getOrCreate()
+    import sparkSession.implicits._
 
+    val func = udf( (s:String) => if(s.toLowerCase.equals("ios")) 1 else 0 )
+    this.dataFrame.withColumn("iOS", func($"os")).drop("os")
+  }
 
 
   /**
@@ -68,5 +73,4 @@ case class Cleanser(dataFrame: DataFrame) {
       || $"interests".endsWith(interestToHandle),
       1).otherwise(0))
   }
-
 }

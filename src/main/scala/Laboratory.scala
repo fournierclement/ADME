@@ -24,8 +24,9 @@ object Laboratory extends App with Session {
     //Cleansing tests
     val dataFrame2 = Cleanser(dataframetest).handleAppOrSite()
     val dataFrame3 = Cleanser(dataFrame2).handleLabel()
-    val dataFrame4 = Cleanser(dataFrame3).handleInterests()
-    dataFrame4.show()
+    val dataFrame4 = Cleanser(dataFrame3).handleOS()
+    val dataFrame5 = Cleanser(dataFrame4).handleInterests()
+    dataFrame5.show(100)
   }
 
 }
