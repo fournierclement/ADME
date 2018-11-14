@@ -10,6 +10,7 @@ class ModelSession(filepath: String) extends Session {
   def runner(spark: SparkSession){
   // Read Json -> dataframe 
   val dataFrame = AdmeCleanser(Cleanser(spark.read.json( filepath )))
+  AdmeCleanser(new Cleanser(dataFrame)).show
   // Create trainning DataFrame
   val trainingDF = dataFrame;
   // Create validation DataFrame
