@@ -22,7 +22,7 @@ case class Cleanser(dataFrame: DataFrame) {
       this.dataFrame.withColumn("app", when($"appOrSite".endsWith("app"), 1.0).otherwise(0.0)).drop("appOrSite")
     )
   }
-
+  
   def handleOS(): Cleanser = {
     val func = udf( (s:String) => if(s != null && s.toLowerCase.equals("ios")) 1.0 else 0.0 )
     Cleanser(

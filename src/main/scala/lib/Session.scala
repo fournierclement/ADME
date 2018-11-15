@@ -20,9 +20,9 @@ trait Session {
     runner(spark)
   } catch {
     case e : Throwable => {
-      spark.stop
+      spark.close
       throw e
     }
   }
-  spark.stop
+  spark.close
 }
