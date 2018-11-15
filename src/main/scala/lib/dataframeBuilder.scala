@@ -2,6 +2,7 @@ package lib
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.ml.feature.VectorAssembler
 import org.apache.spark.ml.linalg.Vectors
+import org.apache.spark.ml.feature.ChiSqSelector
 
 /**
 * @desc Pick row in given dataframe to create a Training DataFrame and a Validation DataFrame
@@ -30,7 +31,7 @@ object PickDataSets {
       .setOutputCol("selectedFeatures")
       .fit(output)
       // selector.write.overwrite().save(selectorPath)
-    val selected = selector.transform(dataFrame)
+    val selected = chiselector.transform(dataframe)
 
     val spreadSet = selected.randomSplit( weights )
     val trainingDataframe = spreadSet(0);
