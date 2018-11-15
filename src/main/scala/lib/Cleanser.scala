@@ -13,18 +13,18 @@ case class Cleanser(dataFrame: DataFrame) {
 
   def handleLabel(): Cleanser = {
     Cleanser(
-      this.dataFrame.withColumn("label", when($"label".endsWith("true"), 1).otherwise(0))
+      this.dataFrame.withColumn("label", when($"label".endsWith("true"), 1.0).otherwise(0.0))
     )
   }
 
   def handleAppOrSite(): Cleanser = {
     Cleanser(
-      this.dataFrame.withColumn("app", when($"appOrSite".endsWith("app"), 1).otherwise(0)).drop("appOrSite")
+      this.dataFrame.withColumn("app", when($"appOrSite".endsWith("app"), 1.0).otherwise(0.0)).drop("appOrSite")
     )
   }
 
   def handleOS(): Cleanser = {
-    val func = udf( (s:String) => if(s != null && s.toLowerCase.equals("ios")) 1 else 0 )
+    val func = udf( (s:String) => if(s != null && s.toLowerCase.equals("ios")) 1.0 else 0.0 )
     Cleanser(
       this.dataFrame.withColumn("iOS", func($"os")).drop("os")
     )
@@ -48,7 +48,7 @@ case class Cleanser(dataFrame: DataFrame) {
   // https://spark.apache.org/docs/latest/ml-features.html#stringindexer
 
   def handleExchange(): Cleanser = {
-    Cleanser( 
+    Cleanser(
       handleExchangeTailrec(dataFrame, Cleanser.exchanges).drop("exchange")
     )
   }
@@ -59,7 +59,7 @@ case class Cleanser(dataFrame: DataFrame) {
       df
     } else {
       handleExchangeTailrec(
-        df.withColumn(exchanges.head, when($"exchange".contains(exchanges.head), 1).otherwise(0)),
+        df.withColumn(exchanges.head, when($"exchange".contains(exchanges.head), 1.0).otherwise(0.0)),
         exchanges.tail
       )
     }
@@ -81,7 +81,7 @@ case class Cleanser(dataFrame: DataFrame) {
       $"interests".contains(interestToHandle+",")
       || $"interests".contains(interestToHandle + "-")
       || $"interests".endsWith(interestToHandle),
-      1).otherwise(0))
+      1.0).otherwise(0.0))
   }
 }
 

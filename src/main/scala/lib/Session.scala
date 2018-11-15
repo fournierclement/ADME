@@ -7,7 +7,7 @@ trait Session {
   Logger.getLogger("org").setLevel(Level.WARN)
 
   val CORES = scala.util.Properties.envOrElse("SPARK_CORE", "*" )
-  val MEMORY = scala.util.Properties.envOrElse("SPARK_RAM", "4g" )
+  val MEMORY = scala.util.Properties.envOrElse("SPARK_RAM", "16g" )
 
   val spark = SparkSession.builder
     .master(s"local[$CORES]")

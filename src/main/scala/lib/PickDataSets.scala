@@ -16,24 +16,23 @@ object PickDataSets {
    def apply( dataframe: DataFrame, features: Array[String], trainingRate: Double ) : (DataFrame, DataFrame) = {
     val weights = Array(trainingRate, 1.0-trainingRate);
 
-    val output = new VectorAssembler()
+    val assembler = new VectorAssembler()
       .setInputCols(features)
       .setOutputCol("features")
-      .transform(dataframe)
-
-
-    val chiSelected = new ChiSqSelector()
-      .setNumTopFeatures(1)
-      .setFeaturesCol("features")
-      .setLabelCol("label")
-      .setOutputCol("selectedFeatures")
-      .fit(output)
-      .transform(output)
-      .select("selectedFeatures", "label")
+    val output = assembler.transform(dataframe)
+      .select("features", "label")
+    // val chiSelected = new ChiSqSelector()
+    //   .setNumTopFeatures(15)
+    //   .setFeaturesCol("features")
+    //   .setLabelCol("label")
+    //   .setOutputCol("selectedFeatures")
+    //   .fit(output)
+    //   .transform(output)
+      // .select("selectedFeatures", "label")
 
     // val selected = chiselector.transform(dataframe)
 
-    val spreadSet = chiSelected.randomSplit( weights )
+    val spreadSet = output.randomSplit( weights )
     val trainingDataframe = spreadSet(0);
     val validationDataframe = spreadSet(1);
 
