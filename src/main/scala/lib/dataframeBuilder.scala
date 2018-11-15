@@ -13,30 +13,30 @@ import org.apache.spark.ml.feature.ChiSqSelector
 */
 object PickDataSets {
 
-   def PickDataSets( dataframe: DataFrame, features: Array[String], trainingRate: Double ) : (DataFrame, DataFrame) = {
+   def apply( dataframe: DataFrame, features: Array[String], trainingRate: Double ) : (DataFrame, DataFrame) = {
     val weights = Array(trainingRate, 1.0-trainingRate);
 
-    val assembler = new VectorAssembler()
+    val output = new VectorAssembler()
       .setInputCols(features)
       .setOutputCol("features")
-
-    val output = assembler.transform(dataframe)
-      .select("features", "clicked")
+      .transform(dataframe)
 
 
-    val chiselector = new ChiSqSelector()
-      .setNumTopFeatures(6)
+    val chiSelected = new ChiSqSelector()
+      .setNumTopFeatures(1)
       .setFeaturesCol("features")
       .setLabelCol("label")
       .setOutputCol("selectedFeatures")
       .fit(output)
-      // selector.write.overwrite().save(selectorPath)
-    val selected = chiselector.transform(dataframe)
+      .transform(output)
+      .select("selectedFeatures", "label")
 
-    val spreadSet = selected.randomSplit( weights )
+    // val selected = chiselector.transform(dataframe)
+
+    val spreadSet = chiSelected.randomSplit( weights )
     val trainingDataframe = spreadSet(0);
     val validationDataframe = spreadSet(1);
 
-    return (trainingDataframe, validationDataframe)
+    (trainingDataframe, validationDataframe)
   }
 }

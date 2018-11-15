@@ -7,7 +7,7 @@ trait Session {
   Logger.getLogger("org").setLevel(Level.WARN)
 
   val CORES = scala.util.Properties.envOrElse("SPARK_CORE", "*" )
-  val MEMORY = scala.util.Properties.envOrElse("SPARK_RAM", "2g" )
+  val MEMORY = scala.util.Properties.envOrElse("SPARK_RAM", "4g" )
 
   val spark = SparkSession.builder
     .master(s"local[$CORES]")
@@ -16,7 +16,13 @@ trait Session {
     .getOrCreate()
 
   def runner(spark: SparkSession): Unit
-
-  runner(spark)
+  try {
+    runner(spark)
+  } catch {
+    case e : Throwable => {
+      spark.stop
+      throw e
+    }
+  }
   spark.stop
 }

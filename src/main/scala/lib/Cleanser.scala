@@ -24,17 +24,13 @@ case class Cleanser(dataFrame: DataFrame) {
   }
 
   def handleOS(): Cleanser = {
-    val func = udf( (s:String) => if(s.toLowerCase.equals("ios")) 1 else 0 )
+    val func = udf( (s:String) => if(s != null && s.toLowerCase.equals("ios")) 1 else 0 )
     Cleanser(
       this.dataFrame.withColumn("iOS", func($"os")).drop("os")
     )
   }
 
   def handleSize(): Cleanser = {
-    // val func = udf( (s:String) => {
-    //   case String("[\"",w ,"\",\"", h, "\"]") => Vector(w, h)
-    //   case _ => null
-    // })
     Cleanser(
       dataFrame
     )
