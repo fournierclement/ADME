@@ -17,16 +17,20 @@ object Laboratory extends App with Session {
       .drop("network")
       .drop("media")
       .drop("impid")
-      .drop("exchange")
+      .drop("publisher")
+      // .drop("exchange")
 
 
 
     //Cleansing tests
-    val dataFrame2 = Cleanser(dataframetest).handleAppOrSite()
-    val dataFrame3 = Cleanser(dataFrame2).handleLabel()
-    val dataFrame4 = Cleanser(dataFrame3).handleOS()
-    val dataFrame5 = Cleanser(dataFrame4).handleInterests()
-    dataFrame5.show(100)
+    val dataFrame1 = Cleanser(dataframetest)
+    .handleAppOrSite()
+    .handleLabel()
+    .handleOS()
+    .handleInterests()
+    .handleExchange()
+    .dataFrame
+    .show(10)
   }
 
 }
