@@ -16,7 +16,7 @@ class ModelSession(filepath: String) extends Session {
     val dataFrame = Cleanser.clean(spark.read.json( filepath ))
     // dataFrame.show(10)
     dataFrame.show(100)
-    // Create trainning DataFrame
+    // Create training DataFrame
     // Create validation DataFrame
     val (trainingDataframe, validationDataframe) = PickDataSets(dataFrame, headers, 0.5)
     trainingDataframe.show(100)
@@ -35,7 +35,6 @@ class ModelSession(filepath: String) extends Session {
     // Overall Statistics
     println("Summary Statistics")
     println(s"Accuracy = ${matrix.accuracy}")
-    println(s"precision = ${matrix.precision}")
     val metrics = new RegressionMetrics(labelAndPreds)
     // Squared error
     println(s"MSE = ${metrics.meanSquaredError}")
@@ -46,7 +45,6 @@ class ModelSession(filepath: String) extends Session {
 
     // Mean absolute error
     println(s"MAE = ${metrics.meanAbsoluteError}")
-
     // Save model
     model.save(spark.sparkContext, "./randomTreeModel")
   }
