@@ -14,12 +14,11 @@ class ModelSession(filepath: String) extends Session {
     // Read Json -> dataframe
     val headers = Cleanser.headers
     val dataFrame = Cleanser.clean(spark.read.json( filepath ))
-    // dataFrame.show(10)
-    dataFrame.show(100)
+    
     // Create training DataFrame
     // Create validation DataFrame
     val (trainingDataframe, validationDataframe) = PickDataSets(dataFrame, headers, 0.5)
-    trainingDataframe.show(100)
+    
     // Create Model
     val model = Model.train(trainingDataframe)
     // Test Model

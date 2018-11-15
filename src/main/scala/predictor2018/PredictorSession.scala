@@ -14,14 +14,6 @@ class PredictorSession(jsonPath: String, modelPath: String, csvPath: String) ext
   // predicte
   val predicted = Model.predict(cleanDf, dataFrame, model)
   // Save csv
-  // val partitionPredicted = predicted.coalesce(1)
-  // // partitionPredicted.saveAsTextFile(csvPath)
-  //  // predicted.asInstanceOf[MLWritable].write
-  //  // // .format("com.databricks.spark.csv")
-  //  // .option("header", "true")
-  //  // .save(csvPath)
-  // partitionPredicted
-  // .write.csv(csvPath)
   predicted
      .repartition(1)
      .write.format("com.databricks.spark.csv")

@@ -30,12 +30,6 @@ case class Cleanser(dataFrame: DataFrame) {
     )
   }
 
-  def handleSize(): Cleanser = {
-    Cleanser(
-      dataFrame
-    )
-  }
-
   /**
     * Returns the cleanser's dataframe with the interests column exploded
     * @return the dataframe modified.

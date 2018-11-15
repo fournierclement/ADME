@@ -21,16 +21,6 @@ object PickDataSets {
       .setOutputCol("features")
     val output = assembler.transform(dataframe)
       .select("features", "label")
-    // val chiSelected = new ChiSqSelector()
-    //   .setNumTopFeatures(15)
-    //   .setFeaturesCol("features")
-    //   .setLabelCol("label")
-    //   .setOutputCol("selectedFeatures")
-    //   .fit(output)
-    //   .transform(output)
-      // .select("selectedFeatures", "label")
-
-    // val selected = chiselector.transform(dataframe)
 
     val spreadSet = output.randomSplit( weights )
     val trainingDataframe = spreadSet(0);
