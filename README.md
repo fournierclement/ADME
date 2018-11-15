@@ -20,10 +20,10 @@ Type the corresponding number to the one attributed to model.Main and press ente
 Wait a moment, and your model will be created and information will be displayed to you about the model used on a validation set.
 
 Now, if you want to use an already created model, in the sbt shell :
-type "run", followed by the path of your data-students.json, the path to your model and the path to the csv file in the output.
+type "run", followed by the path of your data-students.json, the path to your model folder and the path to the output folder in which your csv file will be written.
 
 For example, once you are in the sbt shell, type :
-"run resources/data-students.json randomTreeModel/model.json output/output.csv".
+"run resources/data-students.json randomTreeModel/ output/".
 
 Now, choose the number corresponding to predictor.Main and press enter.
 
